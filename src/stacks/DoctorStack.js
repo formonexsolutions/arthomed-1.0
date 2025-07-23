@@ -2,32 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import DashBoard from '../screens/doctorScreens/DashBoard';
 
 const Tab = createBottomTabNavigator();
-function TopBar({ onNotificationPress }) {
-  return (
-    <View style={styles.topBar}>
-      {/* Left: Logo */}
-      <Image
-        source={require('../images/logo.png')} 
-        style={styles.logo}
-      />
 
-      {/* Right: Notification Icon */}
-      <TouchableOpacity onPress={onNotificationPress}>
-        <Icon name="notifications-outline" size={28} color="#000" />
-      </TouchableOpacity>
-    </View>
-  );
-}
 
-function HomeScreen() {
-  return (
-    <View style={styles.screen}>
-      <Text style={styles.text}>Home Screen</Text>
-    </View>
-  );
-}
 
 function ProfileScreen() {
   return (
@@ -60,8 +39,7 @@ export default function DoctorStack() {
 
   return (
       <View style={styles.container}>
-        <TopBar onNotificationPress={handleNotificationPress} />
-
+      
         <Tab.Navigator
           screenOptions={({ route }) => ({
             headerShown: false,
@@ -80,11 +58,11 @@ export default function DoctorStack() {
 
               return <Icon name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: '#007AFF',
+            tabBarActiveTintColor: '#4B2EDE',
             tabBarInactiveTintColor: 'gray',
           })}
         >
-          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Home" component={DashBoard} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
           <Tab.Screen name="Notifications" component={NotificationsScreen} />
           <Tab.Screen name="Settings" component={SettingsScreen} />

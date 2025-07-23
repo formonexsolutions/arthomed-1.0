@@ -84,7 +84,7 @@ const CreateAccount = ({ navigation }) => {
          <ScrollView  bounces={false} style={{ flexGrow: 1, }} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.greeting}>Hello</Text>
+                <Text style={styles.greeting}>Register</Text>
                 <Text style={styles.subGreeting}>Create Your Account!</Text>
             </View>
             <View style={styles.formContainer}>
@@ -183,7 +183,7 @@ export default CreateAccount;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#205998",
+        backgroundColor: "#4B2EDE",
         flex: 1,
     },
     header: {
@@ -214,16 +214,18 @@ const styles = StyleSheet.create({
         flex:1
     },
     label: {
-        color: "#205998",
-        fontWeight: "500",
+        color: "black",
+        // fontWeight: "500",
         fontSize: 14,
         marginTop: 20,
     },
     input: {
         width: "100%",
-        height: 40,
-        borderBottomWidth: 1,
-        borderColor: "#205998",
+        
+        borderWidth: 1,
+        marginTop:5,
+        borderRadius:7,
+        borderColor: "black",
     },
     inputError: {
         borderColor: "red",
@@ -238,7 +240,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         borderBottomWidth: 1,
-        borderColor: "#205998",
+        borderColor: "#4B2EDE",
     },
     countryCode: {
         color: "#767676",
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     },
     selectBox: {
         borderBottomWidth: 1,
-        borderColor: "#205998",
+        borderColor: "#4B2EDE",
         borderTopWidth: 0,
         borderLeftWidth: 0,
         borderRightWidth: 0,
@@ -259,7 +261,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 44,
         borderRadius: 10,
-        backgroundColor: "#205998",
+        backgroundColor: "#4B2EDE",
         marginTop: 40,
         justifyContent: "center",
         alignItems: "center",
@@ -278,6 +280,6 @@ const styles = StyleSheet.create({
     },
     loginText: {
         fontWeight: "500",
-        color: "#205998",
+        color: "#4B2EDE",
     },
 });

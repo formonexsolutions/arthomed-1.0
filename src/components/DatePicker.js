@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     container: {
     },
     label: {
-        color: '#205998',
-        fontWeight: "500",
+        color: '#4B2EDE',
+        // fontWeight: "500",
         fontSize: 14,
        marginVertical:8
     },

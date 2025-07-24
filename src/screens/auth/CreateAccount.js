@@ -116,7 +116,7 @@ const CreateAccount = ({ navigation }) => {
 
                         {/* Phone Field */}
                         <Text style={styles.label}>Enter Phone Number</Text>
-                        <View style={styles.phoneInputContainer}>
+                        <View style={[styles.phoneInputContainer, errors.phone && styles.inputError]}>
                             <Text style={styles.countryCode}>+91</Text>
                             <TextInput
                                 style={[
@@ -207,25 +207,27 @@ const styles = StyleSheet.create({
         flex: 1,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        paddingBottom: 20,
     },
     form: {
-        marginVertical: 20,
+        marginTop: 20,
         marginHorizontal: 20,
-        flex:1
     },
     label: {
         color: "black",
-        // fontWeight: "500",
         fontSize: 14,
         marginTop: 20,
+        marginBottom: 5,
     },
     input: {
-        width: "100%",
-        
         borderWidth: 1,
-        marginTop:5,
-        borderRadius:7,
-        borderColor: "black",
+        borderColor: "#ccc",
+        borderRadius: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        fontSize: 14,
+        color: "#000",
+        backgroundColor: "#F9F9F9",
     },
     inputError: {
         borderColor: "red",
@@ -238,37 +240,44 @@ const styles = StyleSheet.create({
     phoneInputContainer: {
         flexDirection: "row",
         alignItems: "center",
-        width: "100%",
-        borderBottomWidth: 1,
-        borderColor: "#4B2EDE",
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: "#ccc",
+        backgroundColor: "#F9F9F9",
+        paddingHorizontal: 10,
+        height: 45,
+        borderBottomWidth:1
     },
     countryCode: {
-        color: "#767676",
-        marginRight: 5,
+        color: "#000",
+        fontSize: 14,
+        marginRight: 6,
     },
     phoneInput: {
         flex: 1,
-        height: 40,
+       
+        fontSize: 14,   
+        color: "#000",
     },
     selectBox: {
-        borderBottomWidth: 1,
-        borderColor: "#4B2EDE",
-        borderTopWidth: 0,
-        borderLeftWidth: 0,
-        borderRightWidth: 0,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        backgroundColor: "#F9F9F9",
+        marginTop: 5,
     },
     button: {
         width: "100%",
-        height: 44,
+        height: 48,
         borderRadius: 10,
         backgroundColor: "#4B2EDE",
-        marginTop: 40,
+        marginTop: 30,
         justifyContent: "center",
         alignItems: "center",
     },
     buttonText: {
         color: "white",
-        fontWeight: "500",
+        fontWeight: "600",
         fontSize: 16,
     },
     footer: {

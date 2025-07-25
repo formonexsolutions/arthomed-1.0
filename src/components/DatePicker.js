@@ -14,9 +14,9 @@ const DatePicker = ({ label, onDateSelect }) => {
         setDatePickerVisibility(false);
     };
 
-     const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+    const formatDate = (date) => {
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
@@ -32,8 +32,14 @@ const DatePicker = ({ label, onDateSelect }) => {
         <View style={styles.container}>
             <Text style={styles.label}>{label}</Text>
             <TouchableOpacity style={styles.input} onPress={showDatePicker}>
-                <Text style={selectedDate ? styles.dateText : styles.placeholderText}>
-                    {selectedDate ? selectedDate.toLocaleDateString() : "Select Date"}
+                <Text
+                    style={
+                        selectedDate ? styles.dateText : styles.placeholderText
+                    }
+                >
+                    {selectedDate
+                        ? formatDate(selectedDate)
+                        : "Select Date of Birth"}
                 </Text>
             </TouchableOpacity>
             <DateTimePickerModal
@@ -41,7 +47,7 @@ const DatePicker = ({ label, onDateSelect }) => {
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
-                
+                maximumDate={new Date()} // ✅ restrict future DOBs
             />
         </View>
     );
@@ -49,26 +55,29 @@ const DatePicker = ({ label, onDateSelect }) => {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 15,
     },
     label: {
-        color: '#205998',
-        fontWeight: "500",
+        color: "black",
         fontSize: 14,
-       marginVertical:8
+        marginBottom: 5,
     },
     input: {
         width: "100%",
-        height: 30,
-        borderBottomWidth: 1,
-        borderColor: '#205998',
+        height: 45,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 7,
         justifyContent: "center",
+        paddingHorizontal: 10,
+        backgroundColor:'#F9F9F9'
     },
     dateText: {
         color: "black",
         fontSize: 14,
     },
     placeholderText: {
-        color: "gray",
+        color: "#767676",
         fontSize: 14,
     },
 });

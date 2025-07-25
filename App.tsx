@@ -1,20 +1,18 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 
+import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import MainStack from './src/stacks/MainStack';
+import store from './src/redux/store';
+import { Provider } from 'react-redux';
 
 function App() {
-
-
+  
   return (
-    <NavigationContainer>
-      <MainStack />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <MainStack />
+      </NavigationContainer>
+    </Provider>
   );
 }
 

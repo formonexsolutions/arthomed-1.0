@@ -84,7 +84,7 @@ const CreateAccount = ({ navigation }) => {
          <ScrollView  bounces={false} style={{ flexGrow: 1, }} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.greeting}>Hello</Text>
+                <Text style={styles.greeting}>Register</Text>
                 <Text style={styles.subGreeting}>Create Your Account!</Text>
             </View>
             <View style={styles.formContainer}>
@@ -116,7 +116,7 @@ const CreateAccount = ({ navigation }) => {
 
                         {/* Phone Field */}
                         <Text style={styles.label}>Enter Phone Number</Text>
-                        <View style={styles.phoneInputContainer}>
+                        <View style={[styles.phoneInputContainer, errors.phone && styles.inputError]}>
                             <Text style={styles.countryCode}>+91</Text>
                             <TextInput
                                 style={[
@@ -183,7 +183,7 @@ export default CreateAccount;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#205998",
+        backgroundColor: "#4B2EDE",
         flex: 1,
     },
     header: {
@@ -207,23 +207,27 @@ const styles = StyleSheet.create({
         flex: 1,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        paddingBottom: 20,
     },
     form: {
-        marginVertical: 20,
+        marginTop: 20,
         marginHorizontal: 20,
-        flex:1
     },
     label: {
-        color: "#205998",
-        fontWeight: "500",
+        color: "black",
         fontSize: 14,
         marginTop: 20,
+        marginBottom: 5,
     },
     input: {
-        width: "100%",
-        height: 40,
-        borderBottomWidth: 1,
-        borderColor: "#205998",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        fontSize: 14,
+        color: "#000",
+        backgroundColor: "#F9F9F9",
     },
     inputError: {
         borderColor: "red",
@@ -236,37 +240,44 @@ const styles = StyleSheet.create({
     phoneInputContainer: {
         flexDirection: "row",
         alignItems: "center",
-        width: "100%",
-        borderBottomWidth: 1,
-        borderColor: "#205998",
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: "#ccc",
+        backgroundColor: "#F9F9F9",
+        paddingHorizontal: 10,
+        height: 45,
+        borderBottomWidth:1
     },
     countryCode: {
-        color: "#767676",
-        marginRight: 5,
+        color: "#000",
+        fontSize: 14,
+        marginRight: 6,
     },
     phoneInput: {
         flex: 1,
-        height: 40,
+       
+        fontSize: 14,   
+        color: "#000",
     },
     selectBox: {
-        borderBottomWidth: 1,
-        borderColor: "#205998",
-        borderTopWidth: 0,
-        borderLeftWidth: 0,
-        borderRightWidth: 0,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        backgroundColor: "#F9F9F9",
+        marginTop: 5,
     },
     button: {
         width: "100%",
-        height: 44,
+        height: 48,
         borderRadius: 10,
-        backgroundColor: "#205998",
-        marginTop: 40,
+        backgroundColor: "#4B2EDE",
+        marginTop: 30,
         justifyContent: "center",
         alignItems: "center",
     },
     buttonText: {
         color: "white",
-        fontWeight: "500",
+        fontWeight: "600",
         fontSize: 16,
     },
     footer: {
@@ -278,6 +289,6 @@ const styles = StyleSheet.create({
     },
     loginText: {
         fontWeight: "500",
-        color: "#205998",
+        color: "#4B2EDE",
     },
 });

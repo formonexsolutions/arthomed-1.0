@@ -176,8 +176,8 @@ const scrollToCalendar = () => {
     <ScrollView style={styles.container} ref={scrollRef} >
       {/* Header */}
       <View style={styles.header}>
-        <Image source={require('../../images/logo2.png')} style={styles.logo} />
-        <Icon name="notifications-outline" size={24} color="#fff" style={styles.notificationIcon} />
+        {/* <Image source={require('../../images/logo2.png')} style={styles.logo} />
+        <Icon name="notifications-outline" size={24} color="#fff" style={styles.notificationIcon} /> */}
         <TextInput
           style={styles.searchInput}
           placeholder="Search for Doctor, Tests, Appointments..."
@@ -419,11 +419,11 @@ const scrollToCalendar = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f6fa' },
-  header: { backgroundColor: '#5B67CA', padding: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
+  container: { flex: 1, backgroundColor: 'white' },
+  header: { backgroundColor: '#5B67CA', paddingHorizontal:15, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,paddingBottom:25 },
   logo: { width: 150, height: 40, marginBottom: 10 },
   notificationIcon: { position: 'absolute', top: 25, right: 20 },
-  searchInput: { backgroundColor: '#fff', borderRadius: 8, padding: 10, marginTop: 10, color: "black" },
+  searchInput: { backgroundColor: '#fff', borderRadius: 8, padding: 10,color: "black" },
   banner: { backgroundColor: '#5B67CA', borderRadius: 12, padding: 10, margin: 10, marginTop: 15, position: 'relative', flexDirection: 'row', alignItems: "center" },
   bannerTitle: { color: '#fff', fontSize: 16, fontWeight: '500' },
   bannerText: { color: '#fff', marginTop: 5, fontSize: 12 },

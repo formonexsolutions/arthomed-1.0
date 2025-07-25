@@ -1,0 +1,678 @@
+openapi: 3.0.0
+info:
+  title: Arthomed Healthcare API
+  version: 1.0.0
+  description: Complete healthcare management API with role-based authentication, OTP verification, and appointment management for React Native applications.
+  contact:
+    name: Arthomed Support
+    email: support@arthomed.com
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development server
+  - url: https://your-production-domain.com/api
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "60d5ec49f1b2c8b1f8e4e1a1"
+        name:
+          type: string
+          example: "John Doe"
+        mobileNumber:
+          type: string
+          example: "9876543210"
+        email:
+          type: string
+          example: "john@example.com"
+        role:
+          type: string
+          enum: [admin, doctor, receptionist, patient]
+        isVerified:
+          type: boolean
+          example: true
+        isActive:
+          type: boolean
+          example: true
+
+    Appointment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "60d5ec49f1b2c8b1f8e4e1a2"
+        patient:
+          $ref: '#/components/schemas/User'
+        doctor:
+          $ref: '#/components/schemas/User'
+        appointmentDate:
+          type: string
+          format: date
+          example: "2024-01-15"
+        appointmentTime:
+          type: string
+          example: "10:30"
+        purposeOfVisit:
+          type: string
+          enum: [consultation, follow-up, emergency, routine-checkup, vaccination, health-screening]
+        reason:
+          type: string
+          example: "Regular checkup"
+        status:
+          type: string
+          enum: [pending, confirmed, rejected, in-progress, completed, cancelled, no-show]
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Error message"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/send-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Send OTP to mobile number
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobileNumber
+              properties:
+                mobileNumber:
+                  type: string
+                  example: "9876543210"
+                purpose:
+                  type: string
+                  enum: [login, registration]
+                  default: login
+      responses:
+        '200':
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "OTP sent successfully via sms"
+                  data:
+                    type: object
+                    properties:
+                      mobileNumber:
+                        type: string
+                      expiresIn:
+                        type: string
+                        example: "5 minutes"
+
+  /auth/verify-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Verify OTP and login/register
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobileNumber
+                - otp
+              properties:
+                mobileNumber:
+                  type: string
+                  example: "9876543210"
+                otp:
+                  type: string
+                  example: "123456"
+                purpose:
+                  type: string
+                  enum: [login, registration]
+                  default: login
+      responses:
+        '200':
+          description: OTP verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      tokens:
+                        type: object
+                        properties:
+                          accessToken:
+                            type: string
+                          refreshToken:
+                            type: string
+                          tokenType:
+                            type: string
+                            example: "Bearer"
+
+  /auth/login-or-register:
+    post:
+      tags:
+        - Authentication
+      summary: Login or register with OTP verification
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobileNumber
+                - otp
+              properties:
+                mobileNumber:
+                  type: string
+                  example: "9876543210"
+                otp:
+                  type: string
+                  example: "123456"
+                name:
+                  type: string
+                  example: "John Doe"
+                  description: "Required for new user registration"
+      responses:
+        '200':
+          description: Login or registration successful
+
+  /auth/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user profile
+      responses:
+        '200':
+          description: User profile retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+
+  /appointments/slots:
+    get:
+      tags:
+        - Appointments
+      summary: Get available time slots for a doctor
+      parameters:
+        - name: doctorId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "60d5ec49f1b2c8b1f8e4e1a1"
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          example: "2024-01-15"
+      responses:
+        '200':
+          description: Available slots retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      doctor:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          specialization:
+                            type: string
+                          consultationFee:
+                            type: number
+                      slots:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            startTime:
+                              type: string
+                              example: "09:00"
+                            endTime:
+                              type: string
+                              example: "09:30"
+                            available:
+                              type: boolean
+                            fee:
+                              type: number
+
+  /appointments/book:
+    post:
+      tags:
+        - Appointments
+      summary: Book appointment with image upload
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - doctorId
+                - appointmentDate
+                - appointmentTime
+                - purposeOfVisit
+                - reason
+              properties:
+                doctorId:
+                  type: string
+                  example: "60d5ec49f1b2c8b1f8e4e1a1"
+                appointmentDate:
+                  type: string
+                  format: date
+                  example: "2024-01-15"
+                appointmentTime:
+                  type: string
+                  example: "10:30"
+                purposeOfVisit:
+                  type: string
+                  enum: [consultation, follow-up, emergency, routine-checkup, vaccination, health-screening]
+                reason:
+                  type: string
+                  example: "Regular checkup"
+                symptoms:
+                  type: string
+                  example: "Chest pain and shortness of breath"
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: "Upload prescription images, reports (max 5 files, 10MB each)"
+      responses:
+        '201':
+          description: Appointment booked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Appointment booked successfully"
+                  data:
+                    type: object
+                    properties:
+                      appointment:
+                        $ref: '#/components/schemas/Appointment'
+
+  /appointments/pending:
+    get:
+      tags:
+        - Appointments
+      summary: Get pending appointments (Receptionist only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: doctorId
+          in: query
+          schema:
+            type: string
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Pending appointments retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      appointments:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Appointment'
+                      pagination:
+                        type: object
+                        properties:
+                          current:
+                            type: integer
+                          pages:
+                            type: integer
+                          total:
+                            type: integer
+                          limit:
+                            type: integer
+
+  /appointments/confirm/{id}:
+    post:
+      tags:
+        - Appointments
+      summary: Confirm appointment (Receptionist only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "60d5ec49f1b2c8b1f8e4e1a2"
+      responses:
+        '200':
+          description: Appointment confirmed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Appointment confirmed successfully"
+
+  /appointments/reject/{id}:
+    post:
+      tags:
+        - Appointments
+      summary: Reject appointment (Receptionist only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  example: "Doctor not available"
+      responses:
+        '200':
+          description: Appointment rejected successfully
+
+  /appointments/manual:
+    post:
+      tags:
+        - Appointments
+      summary: Create manual appointment (Receptionist only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - patientMobile
+                - patientName
+                - doctorId
+                - appointmentDate
+                - appointmentTime
+              properties:
+                patientMobile:
+                  type: string
+                  example: "9876543210"
+                patientName:
+                  type: string
+                  example: "Jane Doe"
+                doctorId:
+                  type: string
+                  example: "60d5ec49f1b2c8b1f8e4e1a1"
+                appointmentDate:
+                  type: string
+                  format: date
+                appointmentTime:
+                  type: string
+                  example: "14:30"
+                purposeOfVisit:
+                  type: string
+                  enum: [consultation, follow-up, emergency, routine-checkup]
+                reason:
+                  type: string
+                isWalkIn:
+                  type: boolean
+                  default: false
+      responses:
+        '201':
+          description: Manual appointment created successfully
+
+  /appointments/my:
+    get:
+      tags:
+        - Appointments
+      summary: Get my appointments (Patient only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: upcoming
+          in: query
+          schema:
+            type: boolean
+        - name: past
+          in: query
+          schema:
+            type: boolean
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, confirmed, rejected, completed, cancelled]
+      responses:
+        '200':
+          description: Patient appointments retrieved
+
+  /users/doctors:
+    get:
+      tags:
+        - Users
+      summary: Get all doctors
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: specialization
+          in: query
+          schema:
+            type: string
+          example: "cardiology"
+      responses:
+        '200':
+          description: Doctors list retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      doctors:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+
+  /admin/create-user:
+    post:
+      tags:
+        - Admin
+      summary: Create new user (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobileNumber
+                - name
+                - role
+              properties:
+                mobileNumber:
+                  type: string
+                  example: "9876543210"
+                name:
+                  type: string
+                  example: "Dr. Smith"
+                email:
+                  type: string
+                  example: "dr.smith@example.com"
+                role:
+                  type: string
+                  enum: [doctor, receptionist]
+                  example: "doctor"
+                doctorInfo:
+                  type: object
+                  properties:
+                    specialization:
+                      type: string
+                      example: "Cardiology"
+                    qualification:
+                      type: string
+                      example: "MD, DM Cardiology"
+                    experience:
+                      type: integer
+                      example: 10
+                    consultationFee:
+                      type: number
+                      example: 500
+                    registrationNumber:
+                      type: string
+                      example: "MH12345"
+                    schedule:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          day:
+                            type: string
+                            enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+                          startTime:
+                            type: string
+                            example: "09:00"
+                          endTime:
+                            type: string
+                            example: "17:00"
+                          isAvailable:
+                            type: boolean
+                            default: true
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User created successfully"
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
